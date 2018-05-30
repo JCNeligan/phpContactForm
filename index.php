@@ -43,15 +43,24 @@
             e.preventDefault();
             var error = "";
 
+            // Check if email field is blank
+            if($("#email").val() == "") {
+                error += "The email field is required.</br>"
+            }
             // Check if subject field is blank
             if($("#subject").val() == "") {
                 error += "The subject field is required.</br>"
             }
+            // Check if content field is blank
             if($("#contentField").val() == "") {
                 error += "The content field is required."
             }
+            // Display error messages
             if(error != "") {
                 $("#error").html('<div class="alert alert-danger" role="alert"><p>There were error(s) in your form:<p>' + error + '</p></div>');
+            }
+            else {
+                $("form").unbind("submit").submit();
             }
         });
     </script>
