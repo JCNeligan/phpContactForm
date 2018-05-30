@@ -14,9 +14,7 @@
     <div class="container">
         <h1>Get in touch!</h1>
 
-        <div id="error">
-
-        </div>
+        <div id="error"></div>
 
         <form>
             <div class="form-group">
@@ -47,12 +45,14 @@
 
             // Check if subject field is blank
             if($("#subject").val() == "") {
-                error += "<p>The subject field is required.</p>"
+                error += "The subject field is required.</br>"
             }
             if($("#contentField").val() == "") {
-                error += "<p>The content field is required.</p>"
+                error += "The content field is required."
             }
-            $("#error").html(error);
+            if(error != "") {
+                $("#error").html('<div class="alert alert-danger" role="alert"><p>There were error(s) in your form:<p>' + error + '</p></div>');
+            }
         });
     </script>
   </body>
