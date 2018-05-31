@@ -1,6 +1,7 @@
 <?php
 // Server side validation
 $error = "";
+$successMessage = "";
 
 if ($_POST) {
     // Check if email is blank
@@ -22,6 +23,17 @@ if ($_POST) {
 
     if ($error != "") {
         $error = '<div class="alert alert-danger" role="alert"><p>There were error(s) in your form:</p><p>' . $error . '</p></div>';
+    } else {
+        $emailTo = "me@domain.com";
+        $subject = $_POST["subject"];
+        $content = $_POST{"content"};
+        $headers = "From: " . $_POST["email"];
+
+        if (mail($emailTo, $subject, $content, $headers)) {
+            $successMessage = '<div class="alert alert-success" role="alert"><p>Your message has been sent.</p>';
+        } else {
+            $error = '<div class="alert alert-danger" role="alert"><p>Your message could not be sent. Please try again later</p>';
+        }
     }
 }
 ?>
@@ -38,7 +50,7 @@ if ($_POST) {
     <div class="container">
         <h1>Get in touch!</h1>
 
-        <div id="error"><?php echo $error; ?></div>
+        <div id="error"><?php echo $error . $successMessage; ?></div>
 
         <form method="post">
             <div class="form-group">
@@ -64,7 +76,6 @@ if ($_POST) {
 
     <script>
         $("form").submit(function (e) {
-            e.preventDefault();
             var error = "";
 
             // Check if email field is blank
@@ -82,9 +93,10 @@ if ($_POST) {
             // Display error messages
             if(error != "") {
                 $("#error").html('<div class="alert alert-danger" role="alert"><p>There were error(s) in your form:<p>' + error + '</p></div>');
+                return false;
             }
             else {
-                $("form").unbind("submit").submit();
+                return true;
             }
         });
     </script>
