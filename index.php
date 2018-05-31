@@ -1,5 +1,29 @@
 <?php
+// Server side validation
+$error = "";
 
+if ($_POST) {
+    // Check if email is blank
+    if (!$_POST["email"]) {
+        $error .= "An email address is required<br/>";
+    }
+    // Check if subject is blank
+    if (!$_POST["subject"]) {
+        $error .= "A subject is required<br/>";
+    }
+    // Check if content field is blank
+    if (!$_POST["content"]) {
+        $error .= "The content field is required<br/>";
+    }
+    // Check if valid email
+    if ($_POST["email"] && filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) == false) {
+        $error .= "The email address is invalid<br/>";
+    }
+
+    if ($error != "") {
+        $error = '<div class="alert alert-danger" role="alert"><p>There were error(s) in your form:</p><p>' . $error . '</p></div>';
+    }
+}
 ?>
 <!doctype html>
 <html lang="en">
@@ -14,21 +38,21 @@
     <div class="container">
         <h1>Get in touch!</h1>
 
-        <div id="error"></div>
+        <div id="error"><?php echo $error; ?></div>
 
-        <form>
+        <form method="post">
             <div class="form-group">
                 <label for="email">Email address</label>
-                <input id="email" class="form-control" placeholder="Enter your email address" type="email"/>
+                <input id="email" class="form-control" placeholder="Enter your email address" type="email" name="email"/>
                 <small class="form-text text-muted">We'll never share your email with anyone else.</small>
             </div>
             <div class="form-group">
                 <label for="subject">Subject</label>
-                <input id="subject" class="form-control" type="text"/>
+                <input id="subject" class="form-control" type="text" name="subject"/>
             </div>
             <div class="form-group">
-                <label for="contentField">What would you like to ask us?</label>
-                <textarea id="contentField" class="form-control" rows="3"></textarea>
+                <label for="content">What would you like to ask us?</label>
+                <textarea id="content" class="form-control" rows="3" name="content"></textarea>
             </div>
             <button type="submit" id="submit" class="btn btn-primary">Submit</button>
 
@@ -52,7 +76,7 @@
                 error += "The subject field is required.</br>"
             }
             // Check if content field is blank
-            if($("#contentField").val() == "") {
+            if($("#content").val() == "") {
                 error += "The content field is required."
             }
             // Display error messages
